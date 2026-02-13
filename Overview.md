@@ -4,7 +4,7 @@ Here you can find the app sample:
 http://hobbies-alb-94b83f2-203665351.eu-central-1.elb.amazonaws.com
 
 ## Back-end
-The back-end was written using the Nest.js framework, which might be too much for this project. I did it on purpose because it has a rich ecosystem and a CLI with code generation.
+The back-end was written using the onion architecture approach 
 
 I also used Prisma ORM for database access because it is simple to install and manage, and it has its own GUI (Prisma Studio).
 
