@@ -1,8 +1,10 @@
+# Build stage
 FROM node:24-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
+
 COPY apps/backend/package*.json ./apps/backend/
 COPY apps/frontend/package*.json ./apps/frontend/
 
@@ -21,20 +23,24 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/apps/backend/package*.json ./apps/backend/
+COPY package*.json ./
+COPY apps/backend/package*.json ./apps/backend/
 
 RUN npm ci --only=production --workspace=apps/backend
 
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+
 COPY --from=builder /app/apps/backend/prisma ./apps/backend/prisma
 
 COPY --from=builder /app/apps/frontend/dist ./apps/frontend/dist
 
-COPY --from=builder /app/apps/backend/prisma/migrations ./apps/backend/prisma/migrations
-
 ENV NODE_ENV=production
+ENV PORT=3000
 
 EXPOSE 3000
 
-CMD cd apps/backend && npx prisma migrate deploy --config prisma/prisma.config.ts && node dist/src/main.js
+WORKDIR /app/apps/backend
+
+CMD npx prisma migrate deploy --config prisma/prisma.config.ts && \
+    npx prisma generate --config prisma/prisma.config.ts && \
+    node dist/index.js

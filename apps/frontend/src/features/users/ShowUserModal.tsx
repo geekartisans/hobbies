@@ -1,14 +1,7 @@
 import { Modal } from "@/components/Modal";
 import { HiUser, HiLocationMarker, HiPhone, HiSparkles } from "react-icons/hi";
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  address?: string;
-  phoneNumber?: string;
-  hobbies?: Array<{ id: number; hobbies: string }>;
-}
+import type { User } from "./api";
+import type { FC } from "react";
 
 interface ShowUserProps {
   isOpen: boolean;
@@ -16,7 +9,7 @@ interface ShowUserProps {
   user: User | null;
 }
 
-export const ShowUserModal = ({ isOpen, onClose, user }: ShowUserProps) => {
+export const ShowUserModal: FC<ShowUserProps> = ({ isOpen, onClose, user }) => {
   if (!user) return null;
 
   return (

@@ -1,7 +1,7 @@
 # The Hobbies app overview
 
 Here you can find the app sample:
-http://hobbies-alb-aacf86b-1219020769.eu-central-1.elb.amazonaws.com/
+http://hobbies-alb-94b83f2-203665351.eu-central-1.elb.amazonaws.com
 
 ## Back-end
 The back-end was written using the Nest.js framework, which might be too much for this project. I did it on purpose because it has a rich ecosystem and a CLI with code generation.

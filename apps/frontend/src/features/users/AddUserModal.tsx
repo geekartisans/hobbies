@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Modal } from "@/components/Modal";
+import type { FC } from "react";
 
 const userSchema = z.object({
   firstName: z.string().min(1, "First name is required").max(100),
@@ -18,11 +19,11 @@ interface UsersCreateProps {
   onSubmit: (data: UserFormData) => void;
 }
 
-export const AddUserModal = ({
+export const AddUserModal: FC<UsersCreateProps> = ({
   isOpen,
   onClose,
   onSubmit,
-}: UsersCreateProps) => {
+}) => {
   const {
     register,
     handleSubmit,

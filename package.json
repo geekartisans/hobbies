@@ -3,17 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
+    "apps/nest-backend",
     "apps/backend",
     "apps/frontend"
   ],
   "scripts": {
-    "dev:backend": "npm run start:dev --workspace=apps/backend",
+    "dev": "npm run dev --workspace=apps/backend",
+    "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "build:backend": "npm run build --workspace=apps/backend",
     "build:frontend": "npm run build --workspace=apps/frontend",
-    "build": "npm run build:frontend && npm run build:backend",
-    "start": "npm run start:prod --workspace=apps/backend",
     "prisma:generate": "npx prisma generate --config apps/backend/prisma/prisma.config.ts",
     "prisma:migrate:create": "npx prisma migrate dev --create-only --config apps/backend/prisma/prisma.config.ts",
     "prisma:migrate": "npx prisma migrate dev --config apps/backend/prisma/prisma.config.ts",

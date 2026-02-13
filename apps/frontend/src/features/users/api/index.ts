@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   address?: string;
@@ -10,16 +10,26 @@ export interface User {
 }
 
 export interface Hobbies {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
+  hobbies: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateUserInput {
+  firstName: string;
+  lastName: string;
+  address?: string;
+  phoneNumber?: string;
+}
+
+export interface CreateHobbyInput {
+  userId: string;
   hobbies: string;
 }
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.PROD && typeof window !== "undefined"
-    ? window.location.origin
-    : "http://localhost:3000");
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
 const USERS_ENDPOINT = `${API_BASE_URL}/api/users`;
 const HOBBIES_ENDPOINT = `${API_BASE_URL}/api/hobbies`;
 
@@ -33,7 +43,7 @@ export const getUsers = async () => {
   return response.json() as Promise<User[]>;
 };
 
-export const postUsers = async (user: Partial<User>) => {
+export const postUsers = async (user: CreateUserInput) => {
   const response = await fetch(USERS_ENDPOINT, {
     method: "POST",
     headers: {
@@ -49,7 +59,7 @@ export const postUsers = async (user: Partial<User>) => {
   return response.json() as Promise<User>;
 };
 
-export const deleteUsers = async (id: number) => {
+export const deleteUsers = async (id: string) => {
   const response = await fetch(`${USERS_ENDPOINT}/${id}`, { method: "DELETE" });
 
   if (!response.ok) {
@@ -59,7 +69,7 @@ export const deleteUsers = async (id: number) => {
   return response.json() as Promise<User>;
 };
 
-export const postHobbies = async (hobbies: Partial<Hobbies>) => {
+export const postHobbies = async (hobbies: CreateHobbyInput) => {
   const response = await fetch(HOBBIES_ENDPOINT, {
     method: "POST",
     headers: {

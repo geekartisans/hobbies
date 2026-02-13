@@ -2,19 +2,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Modal } from "@/components/Modal";
+import type { User } from "./api";
+import type { FC } from "react";
 
 const hobbySchema = z.object({
-  userId: z.number().int().positive("Please select a user"),
+  userId: z.uuid(),
   hobbies: z.string().min(1, "Hobby is required").max(255),
 });
 
 type HobbyFormData = z.infer<typeof hobbySchema>;
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
 
 interface AddHobbiesProps {
   isOpen: boolean;
@@ -23,12 +19,12 @@ interface AddHobbiesProps {
   users: User[];
 }
 
-export const AddHobbiesModal = ({
+export const AddHobbiesModal: FC<AddHobbiesProps> = ({
   isOpen,
   onClose,
   onSubmit,
   users,
-}: AddHobbiesProps) => {
+}) => {
   const {
     register,
     handleSubmit,
@@ -60,7 +56,7 @@ export const AddHobbiesModal = ({
             User <span className="text-red-500">*</span>
           </label>
           <select
-            {...register("userId", { valueAsNumber: true })}
+            {...register("userId")}
             id="userId"
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             defaultValue=""

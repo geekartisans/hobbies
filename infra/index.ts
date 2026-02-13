@@ -221,7 +221,7 @@ const targetGroup = new aws.lb.TargetGroup("hobbies-tg", {
   targetType: "ip",
   healthCheck: {
     enabled: true,
-    path: "/api",
+    path: "/api/health",
     interval: 30,
     timeout: 5,
     healthyThreshold: 2,
@@ -262,42 +262,52 @@ const taskDefinition = new aws.ecs.TaskDefinition("hobbies-task", {
       dbUsername,
       dbPassword,
       logGroup.name,
+      aws.getRegionOutput().name,
     ])
-    .apply(([imageUri, dbEndpoint, dbNameVal, dbUser, dbPass, logGroupName]) =>
-      JSON.stringify([
-        {
-          name: "hobbies-app",
-          image: imageUri,
-          portMappings: [
-            {
-              containerPort: 3000,
-              protocol: "tcp",
-            },
-          ],
-          environment: [
-            {
-              name: "NODE_ENV",
-              value: "production",
-            },
-            {
-              name: "APP_PORT",
-              value: "3000",
-            },
-            {
-              name: "DATABASE_URL",
-              value: `postgresql://${dbUser}:${dbPass}@${dbEndpoint}/${dbNameVal}?schema=${dbSchema}&sslmode=no-verify`,
-            },
-          ],
-          logConfiguration: {
-            logDriver: "awslogs",
-            options: {
-              "awslogs-group": logGroupName,
-              "awslogs-region": "eu-central-1",
-              "awslogs-stream-prefix": "hobbies",
+    .apply(
+      ([
+        imageUri,
+        dbEndpoint,
+        dbNameVal,
+        dbUser,
+        dbPass,
+        logGroupName,
+        region,
+      ]) =>
+        JSON.stringify([
+          {
+            name: "hobbies-app",
+            image: imageUri,
+            portMappings: [
+              {
+                containerPort: 3000,
+                protocol: "tcp",
+              },
+            ],
+            environment: [
+              {
+                name: "NODE_ENV",
+                value: "production",
+              },
+              {
+                name: "PORT",
+                value: "3000",
+              },
+              {
+                name: "DATABASE_URL",
+                value: `postgresql://${dbUser}:${dbPass}@${dbEndpoint}/${dbNameVal}?schema=${dbSchema}&sslmode=no-verify`,
+              },
+            ],
+            logConfiguration: {
+              logDriver: "awslogs",
+              options: {
+                "awslogs-group": logGroupName,
+                "awslogs-region": region,
+                "awslogs-stream-prefix": "hobbies",
+              },
             },
           },
-        },
-      ]),
+        ]),
     ),
 });
 
